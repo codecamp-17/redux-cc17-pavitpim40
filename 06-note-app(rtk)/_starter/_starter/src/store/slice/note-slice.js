@@ -10,7 +10,10 @@ const noteSlice = createSlice({
       // return newNote;
       state.push(action.payload); // immer ==> write code as mutate === immutate
     },
-    deleteNote: (state, action) => {},
+    deleteNote: (state, action) => {
+      const foundIndex = state.findIndex((n) => n.id === action.payload);
+      if (foundIndex !== -1) state.splice(foundIndex, 1);
+    },
   },
 });
 
