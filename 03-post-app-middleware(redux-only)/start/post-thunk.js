@@ -26,6 +26,23 @@ function fetchPostSuccessAction(posts) {
 function fetchPostErrorAction(error) {
   return { type: FETCH_POST_ERROR, payload: error };
 }
+// Action Creator (Async => Thunk middleware จัดการ)
+
+function fetchPostAPI() {
+  return async (dispatch) => {
+    // Step1 - Thunk จะปล่อย action เข้า store โดยตรง
+    dispatch(fetchPostPendingAction());
+
+    try {
+      const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+      // Step2A - ถ้าสำเร็จ Thunk จะปล่อย action object ตัวนี้
+      dispatch(fetchPostSuccessAction(response.data.slice(0, 2)));
+    } catch (error) {
+      // Step2B - ถ้า failed Thunk จะปล่อย action object ตัวนี้
+      dispatch(fetchPostErrorAction(error.message));
+    }
+  };
+}
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -44,21 +61,6 @@ const rootMiddleware = applyMiddleware(thunk, logger);
 const store = createStore(postReducer, rootMiddleware);
 
 // IMPLEMENT
-
-function fetchPostAPI() {
-  return async (dispatch) => {
-    // Step1
-    dispatch(fetchPostPendingAction());
-    try {
-      const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-      // Step2A
-      dispatch(fetchPostSuccessAction(response.data.slice(0, 2)));
-    } catch (error) {
-      // Step2B
-      dispatch(fetchPostErrorAction(error.message));
-    }
-  };
-}
 
 store.dispatch(fetchPostAPI());
 // store.dispatch(plainObject)
