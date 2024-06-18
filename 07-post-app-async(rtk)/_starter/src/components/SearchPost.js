@@ -1,13 +1,17 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { searchPostThunkAPI } from '../store/slices/postSlice';
 
 import './Form.css';
 
 const SearchPost = () => {
+  const dispatch = useDispatch();
   //search form state
   const [search, setSearch] = React.useState('');
   //search form submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(searchPostThunkAPI({ id: +search }));
   };
 
   return (
