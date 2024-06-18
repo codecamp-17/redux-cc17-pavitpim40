@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addNoteAction } from '../store/actions/note-action';
+import { nanoid } from 'nanoid';
 import './Form.css';
 
 const AddNotes = () => {
+  const dispatch = useDispatch();
+
   const [note, setNote] = useState({
     title: '',
     content: '',
@@ -20,6 +25,8 @@ const AddNotes = () => {
       return alert('Please fill in the form');
     }
     e.preventDefault();
+    dispatch(addNoteAction({ id: nanoid(), ...note }));
+    setNote({ title: '', content: '' });
   };
 
   return (
