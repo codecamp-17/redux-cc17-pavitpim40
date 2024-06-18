@@ -9,9 +9,10 @@ const SearchPost = () => {
   //search form state
   const [search, setSearch] = React.useState('');
   //search form submit handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(searchPostThunkAPI({ id: +search }));
+    const i = await dispatch(searchPostThunkAPI({ id: +search })).unwrap();
+    console.log('I', i);
   };
 
   return (
